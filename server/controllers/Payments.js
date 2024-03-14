@@ -4,8 +4,8 @@ const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const {courseEnrollmentEmail} = require("../mail/templates/courseEnrollmentEmail");
 const { default: mongoose } = require("mongoose");
-
-
+    
+    
 
 //capture the payment and initiate the Razorpay order
 exports.capturePayment = async (req, res) => {
@@ -22,6 +22,7 @@ exports.capturePayment = async (req, res) => {
     };
     //valid courseDetail
     let course;
+    
     try{
         course = await Course.findById(course_id);
         if(!course) {
@@ -160,7 +161,5 @@ exports.verifySignature = async (req, res) => {
             success:false,
             message:'Invalid request',
         });
-    }
-
-
-};
+    }    
+}
