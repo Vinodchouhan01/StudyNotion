@@ -25,7 +25,7 @@ export function sendOtp(email, navigate) {
       })
       console.log("SENDOTP API RESPONSE............", response)
 
-      console.log(response.data.success)
+      
 
       if (!response.data.success) {
         throw new Error(response.data.message)
