@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 const allowedOrigins = [
     "http://localhost:3000",
-    "https://studynotion-backend-38d5.onrender.com"
+    // Enter hosted fronted url here or add * to allow all the host
 ];
 
 app.use(
