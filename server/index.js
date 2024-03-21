@@ -21,12 +21,19 @@ database.connect();
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
+
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://studynotion-backend-38d5.onrender.com"
+];
+
 app.use(
-	cors({
-		origin:"http://localhost:3000",
-		credentials:true,
-	})
-)
+    cors({
+        origin: allowedOrigins,
+        credentials: true
+    })
+);
+
 
 app.use(
 	fileUpload({
