@@ -21,12 +21,13 @@ database.connect();
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-	cors({
-		origin:"http://localhost:3000",
-		credentials:true,
-	})
-)
+const corsOptions = {
+	origin: ["http://localhost:3000", "https://studynotion-frontend-9tka.onrender.com"],
+	credentials: true,
+  };
+  
+  app.use(cors(corsOptions));
+  
 
 app.use(
 	fileUpload({
