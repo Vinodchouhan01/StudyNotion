@@ -95,7 +95,7 @@ exports.signup = async (req, res) => {
       accountType: accountType,
       approved: approved,
       additionalDetails: profileDetails._id,
-      image: "",
+      image: `https://ui-avatars.com/api/?name=${firstName}+${lastName}`
     })
 
     return res.status(200).json({
@@ -112,13 +112,10 @@ exports.signup = async (req, res) => {
   }
 }
 
-// Login controller for authenticating users
 exports.login = async (req, res) => {
   try {
-    // Get email and password from request body
     const { email, password } = req.body
 
-    // Check if email or password is missing
     if (!email || !password) {
       // Return 400 Bad Request status code with error message
       return res.status(400).json({
@@ -148,7 +145,7 @@ exports.login = async (req, res) => {
           expiresIn: "24h",
         }
       )
-
+      console.log("Token", token);
       // Save token to user document in database
       user.token = token
       user.password = undefined
@@ -163,6 +160,7 @@ exports.login = async (req, res) => {
         user,
         message: `User Login Success`,
       })
+
     } else {
       return res.status(401).json({
         success: false,
@@ -185,6 +183,7 @@ exports.sendotp = async (req, res) => {
 
     // Check if user is already present
     // Find user with provided email
+    console.log("Email is", email)
     const checkUserPresent = await User.findOne({ email })
     // to be used in case of signup
 
@@ -253,6 +252,7 @@ exports.changePassword = async (req, res) => {
       { password: encryptedPassword },
       { new: true }
     )
+    console.log("Updated User Details", updatedUserDetails)
 
     // Send notification email
     try {
