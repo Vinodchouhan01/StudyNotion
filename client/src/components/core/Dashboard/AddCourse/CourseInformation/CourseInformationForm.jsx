@@ -226,10 +226,11 @@ export default function CourseInformationForm() {
           Course Category <sup className="text-pink-200">*</sup>
         </label>
         <select
-          {...register("courseCategory", { required: true })}
+          {...register("courseCategory"  )}
           defaultValue=""
           id="courseCategory"
           className="form-style w-full"
+          required = {courseCategories?.length > 0}
         >
           <option value="" disabled>
             Choose a Category
