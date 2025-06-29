@@ -82,6 +82,12 @@ export default function MyProfile() {
               </p>
             </div>
             <div>
+              <p className="mb-2 text-sm text-richblack-600">Role</p>
+              <p className="text-sm font-medium text-richblack-5">
+                {user?.accountType}
+              </p>
+            </div>
+            <div>
               <p className="mb-2 text-sm text-richblack-600">Email</p>
               <p className="text-sm font-medium text-richblack-5">
                 {user?.email}
