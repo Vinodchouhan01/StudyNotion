@@ -145,8 +145,6 @@ exports.login = async (req, res) => {
           expiresIn: "24h",
         }
       )
-      // console.log("Token", token);
-      // Save token to user document in database
       user.token = token
       user.password = undefined
       // Set cookie for token and return success response
