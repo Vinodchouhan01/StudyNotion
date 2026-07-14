@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from "react"
 import { FiUpload } from "react-icons/fi"
+import { toast } from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
 
-import { updateDisplayPicture } from "../../../../services/operations/SettingsAPI"
+import { apiConnector } from "../../../../services/apiconnector"
+import { uploadEndpoints } from "../../../../services/apis"
+import { setUser } from "../../../../slices/profileSlice"
+import { uploadFileToBucket } from "../../../../helper/upload"
 import IconBtn from "../../../common/IconBtn"
+
+const { SAVE_PROFILE_IMAGE_URL_API } = uploadEndpoints
 
 export default function ChangeProfilePicture() {
   const { token } = useSelector((state) => state.auth)
@@ -37,20 +43,55 @@ export default function ChangeProfilePicture() {
     }
   }
 
-  const handleFileUpload = () => {
-    try {
-      console.log("uploading...")
-      setLoading(true)
-      const formData = new FormData()
-      formData.append("displayPicture", imageFile)
-      // console.log("formdata", formData)
-      dispatch(updateDisplayPicture(token, formData)).then(() => {
-        setLoading(false)
-      })
-    } catch (error) {
-      console.log("ERROR MESSAGE - ", error.message)
-    }
+const handleFileUpload = async () => {
+  if (!imageFile) {
+    console.log("Please select an image first")
+    return
   }
+
+  const toastId = toast.loading("Uploading...")
+  try {
+    setLoading(true)
+
+    const fileName = `profile-pictures/${user._id}-${Date.now()}-${imageFile.name}`
+
+    const imageUrl = await uploadFileToBucket(
+      token,
+      imageFile.type,
+      fileName,
+      imageFile
+    )
+
+    // console.log("Uploaded S3 image URL:", imageUrl)
+
+    if (!imageUrl) {
+      throw new Error("Image upload failed")
+    }
+
+    const response = await apiConnector(
+      "PUT",
+      SAVE_PROFILE_IMAGE_URL_API,
+      { imageUrl },
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    )
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
+    }
+
+    dispatch(setUser(response.data.data))
+    toast.success("Display Picture Updated Successfully")
+  } catch (error) {
+    console.error("ERROR MESSAGE:", error)
+    toast.error("Could Not Update Display Picture")
+  } finally {
+    setLoading(false)
+    toast.dismiss(toastId)
+  }
+}
 
   useEffect(() => {
     if (imageFile) {
