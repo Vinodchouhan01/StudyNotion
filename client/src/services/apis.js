@@ -70,3 +70,9 @@ export const settingsEndpoints = {
   CHANGE_PASSWORD_API: BASE_URL + "/auth/changepassword",
   DELETE_PROFILE_API: BASE_URL + "/profile/deleteProfile",
 }
+
+
+export const uploadEndpoints = {
+  UPLOAD_SIGNED_URL_API: BASE_URL + "/upload/getUploadSignedUrl",
+  SAVE_PROFILE_IMAGE_URL_API: BASE_URL + "/upload/saveProfileImageUrl",
+}
